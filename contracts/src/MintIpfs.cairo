@@ -1,4 +1,4 @@
-use starknet::ContractAddress;
+ use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IMintIpfs<T> {
@@ -17,9 +17,9 @@ mod MintIpfs {
 
     use contracts::components::Counter::CounterComponent;
     
-    // use openzeppelin::token::erc721::{
-    //     ERC721Component, interface::{IERC721Metadata, IERC721MetadataCamelOnly}
-    // };
+    use openzeppelin::token::erc721::{
+        ERC721Component, interface::{IERC721Metadata, IERC721MetadataCamelOnly}
+    };
 
     use super::{IMintIpfs, ContractAddress};
 
