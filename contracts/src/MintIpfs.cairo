@@ -1,4 +1,4 @@
-use starknet::ContractAddress;
+use core::starknet::{ContractAddress};
 use core::byte_array::ByteArray;
 use core::integer::u256;
  
@@ -105,6 +105,9 @@ mod MintIpfs {
         } //aí o contrato passa esse return_hash pro front e o front dá um fetch na url    
         
         fn mint_item(ref self: ContractState, recipient:ContractAddress) -> u256 {
+            let caller = core::starknet::get_caller_address();
+            assert!(recipient == caller, "recipient is not owner");
+
             self.token_id_counter.increment();
             let token_id = self.token_id_counter.current();
 
