@@ -24,8 +24,6 @@ mod MintIpfs {
         ERC721HooksEmptyImpl, ERC721Component, interface::{IERC721Metadata, IERC721MetadataCamelOnly}
     };
 
-    impl ERC721InternalImpl = ERC721Component::InternalImpl<ContractState>;
-
     use super::IMintIpfs;
     use starknet::ContractAddress;
     use core::byte_array::ByteArray;
@@ -44,15 +42,15 @@ mod MintIpfs {
     impl OwnableImpl = OwnableComponent::OwnableImpl<ContractState>;
     #[abi(embed_v0)]
     impl CounterImpl = CounterComponent::CounterImpl<ContractState>;
-
-    // #[abi(embed_v0)]
-    // impl ERC721Impl = ERC721Component::ERC721Impl<ContractState>;
-    // #[abi(embed_v0)]
-    // impl ERC721CamelOnlyImpl = ERC721Component::ERC721CamelOnlyImpl<ContractState>;
-    
     #[abi(embed_v0)]
     impl SRC5Impl = SRC5Component::SRC5Impl<ContractState>;
 
+    #[abi(embed_v0)]
+    impl ERC721Impl = ERC721Component::ERC721Impl<ContractState>;
+    #[abi(embed_v0)]
+    impl ERC721CamelOnlyImpl = ERC721Component::ERC721CamelOnlyImpl<ContractState>;
+
+    impl ERC721InternalImpl = ERC721Component::InternalImpl<ContractState>;
      
     #[storage]
     struct Storage {
