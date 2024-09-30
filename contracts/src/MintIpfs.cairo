@@ -11,6 +11,7 @@ pub trait IMintIpfs<T> {
     fn mint_item(ref self: T, recipient: ContractAddress)->u256;
 }
 
+#[starknet::contract]
 mod MintIpfs {
     use core::num::traits::zero::Zero;
 
@@ -32,20 +33,27 @@ mod MintIpfs {
         MutableVecTrait
     };
 
-    // #[abi(embed_v0)]
-    // impl OwnableImpl = OwnableComponent::OwnableImpl<ContractState>;
-    // #[abi(embed_v0)]
-    // impl CounterImpl = CounterComponent::CounterImpl<ContractState>;
+    component!(path: ERC721Component, storage: erc721, event: ERC721Event);
+    component!(path: SRC5Component, storage: src5, event: SRC5Event);
+    component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
+    component!(path: CounterComponent, storage: token_id_counter, event: CounterEvent);
+
+    #[abi(embed_v0)]
+    impl OwnableImpl = OwnableComponent::OwnableImpl<ContractState>;
+    #[abi(embed_v0)]
+    impl CounterImpl = CounterComponent::CounterImpl<ContractState>;
+
     // #[abi(embed_v0)]
     // impl ERC721Impl = ERC721Component::ERC721Impl<ContractState>;
     // #[abi(embed_v0)]
     // impl ERC721CamelOnlyImpl = ERC721Component::ERC721CamelOnlyImpl<ContractState>;
-    // #[abi(embed_v0)]
-    // impl SRC5Impl = SRC5Component::SRC5Impl<ContractState>;
+    
+    #[abi(embed_v0)]
+    impl SRC5Impl = SRC5Component::SRC5Impl<ContractState>;
 
      
     #[storage]
-    struct ContractState {
+    struct Storage {
         #[substorage(v0)]
         erc721: ERC721Component::Storage,
         #[substorage(v0)]
@@ -92,8 +100,8 @@ mod MintIpfs {
         fn define_hash(ref self: ContractState, token_id: u256, ipfs: ByteArray){
             self.hashes.entry(token_id).write(ipfs);
         }
-        fn return_hash(self: @ContractState, token_id: u256)-> ByteArray{
-            return self.hashes.entry(token_id).read();
+        fn return_hash(self: @ContractState, token_id: u256){
+            self.hashes.entry(token_id).read();
         } //aí o contrato passa esse return_hash pro front e o front dá um fetch na url    
         
         fn mint_item(ref self: ContractState, recipient:ContractAddress) -> u256 {
@@ -104,7 +112,7 @@ mod MintIpfs {
             //let token_id = 22;
 
             self.erc721.mint(recipient, token_id);
-            token_id
+            return token_id;
         }
     }
 
