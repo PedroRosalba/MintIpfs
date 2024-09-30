@@ -21,8 +21,10 @@ mod MintIpfs {
     use contracts::components::Counter::CounterComponent;
     
     use openzeppelin::token::erc721::{
-        ERC721Component, interface::{IERC721Metadata, IERC721MetadataCamelOnly}
+        ERC721HooksEmptyImpl, ERC721Component, interface::{IERC721Metadata, IERC721MetadataCamelOnly}
     };
+
+    impl ERC721InternalImpl = ERC721Component::InternalImpl<ContractState>;
 
     use super::IMintIpfs;
     use starknet::ContractAddress;
