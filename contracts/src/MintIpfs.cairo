@@ -2,11 +2,11 @@
 
 #[starknet::interface]
 pub trait IMintIpfs<T> {
-    fn storage_hash(ref self:T, ipfs: ByteArray);
-    fn define_hash(ref self: T, token_id: u256);
-    fn return_hash(ref self: T, token_id: u256);
+    fn storage_hash(ref self:TContractState, ipfs: ByteArray);
+    fn define_hash(ref self: TContractState, token_id: u256, ipfs: ByteArray);
+    fn return_hash(self: @TContractState, token_id: u256);
 
-    fn mint_item(ref self: T, recipient: ContractAddress)->u256;
+    fn mint_item(ref self: TContractState, recipient: ContractAddress)->u256;
 }
 
 mod MintIpfs {
@@ -23,7 +23,6 @@ mod MintIpfs {
 
     use super::{IMintIpfs, ContractAddress};
 
-    // Expose entrypoints
     #[abi(embed_v0)]
     impl OwnableImpl = OwnableComponent::OwnableImpl<ContractState>;
     #[abi(embed_v0)]
@@ -77,12 +76,12 @@ mod MintIpfs {
     #[abi(embed_v0)]
     impl MintIpfs of IMintIpfs<ContractState>{
         fn storage_hash(ref self: ContractState, ipfs: ByteArray){
-            ipfs_hash = ipfs;
+            self.ipfs_hash.write(ipfs);
         }    
         fn define_hash(ref self: ContractState, token_id: u256, ipfs: ByteArray){
             self.hashes.write(token_id, ipfs);
         }
-        fn return_hash(ref self: ContractState, token_id: u256)-> ByteArray{
+        fn return_hash(self: @ContractState, token_id: u256)-> ByteArray{
             return self.hashes.read(token_id);
         } //aí o contrato passa esse return_hash pro front e o front dá um fetch na url    
         
