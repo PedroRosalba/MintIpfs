@@ -9,6 +9,7 @@ pub trait IMintIpfs<T> {
     fn return_hash(self: @T, token_id: u256);
 
     fn mint_item(ref self: T, recipient: ContractAddress)->u256;
+    fn token_ipfs(ref self: T, token_id:u256, ipfs_hash: ByteArray) -> ByteArray;
 }
 
 #[starknet::contract]
@@ -102,8 +103,7 @@ mod MintIpfs {
         }
         fn return_hash(self: @ContractState, token_id: u256){
             self.hashes.entry(token_id).read();
-        } //aí o contrato passa esse return_hash pro front e o front dá um fetch na url    
-        
+        } 
         fn mint_item(ref self: ContractState, recipient:ContractAddress) -> u256 {
             let caller = core::starknet::get_caller_address();
             assert!(recipient == caller, "recipient is not owner");
@@ -117,6 +117,12 @@ mod MintIpfs {
             self.erc721.mint(recipient, token_id);
             return token_id;
         }
+        
+        fn token_ipfs(ref self: ContractState, token_id: u256, ipfs_hash: ByteArray) -> ByteArray{
+            // self._require_owned(token_id);
+            let base_uri: ByteArray = "https://ipfs.io/ipfs/";
+            return format!("{}{}", base_uri, ipfs_hash);
+        } 
+        //so dar um fetch nessa url agora
     }
-
 }
