@@ -126,3 +126,13 @@ mod MintIpfs {
         //so dar um fetch nessa url agora
     }
 }
+
+// #[cfg(test)]
+// mod tests{
+//     use super::mint_item;
+//     #[test]
+//     fn test_mint(){
+//         let hash_storage = storage_hash("meuhash");
+// 	assert(hash_storage == "meuhash", "storaging workin");
+//     }
+// }

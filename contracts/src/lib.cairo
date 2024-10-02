@@ -4,6 +4,6 @@ mod components {
 }
 
 #[cfg(test)]
-mod test{
+mod tests {
     mod TestContract;
 }
